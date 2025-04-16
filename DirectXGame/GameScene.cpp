@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "Player.h"
 
 using namespace KamataEngine;
 
@@ -6,9 +7,11 @@ using namespace KamataEngine;
 GameScene::~GameScene() {
 
 	delete model_; 
+	delete player_;
 }
 
-void GameScene::Initialize() {
+void GameScene::Initialize() 
+{
 
 	//ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("mario.jpg");
@@ -20,10 +23,18 @@ void GameScene::Initialize() {
 
 	//カメラの初期化
 	camera_.Initialize();
+
+	player_ = new Player();
+
+	player_->Initialize(model_, textureHandle_, &camera_);
 	
 }
 
+
+
 void GameScene::Update() {
+
+	player_->Update();
 
 }
 
@@ -43,5 +54,7 @@ void GameScene::Draw() {
 
 	//3Dモデル描画後処理
 	Model::PostDraw();
+
+	player_->Draw();
 
 }

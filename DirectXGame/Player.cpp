@@ -1,10 +1,14 @@
 #include "GameScene.h"
+#include "cassert"
 
 using namespace KamataEngine;
 
-GameScene::~GameScene() { delete model_; }
+Player::~Player() { 
+	delete model_;
 
-void GameScene::Initialize() {
+}
+
+void Player::Initialize(Model* model, uint32_t textureHandle,Camera* camera) {
 
 	// ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("mario.jpg");
@@ -16,11 +20,19 @@ void GameScene::Initialize() {
 
 	// カメラの初期化
 	camera_.Initialize();
+
+	//NULLポインタチェック
+	assert(model);
+
+
+
 }
 
-void GameScene::Update() {}
+void Player::Update() {
 
-void GameScene::Draw() {
+}
+
+void Player::Draw() {
 
 	// DirectXCommonインスタンスの取得
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
