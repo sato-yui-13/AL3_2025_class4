@@ -20,7 +20,6 @@ private:
 	// ワールド変換データ
 	KamataEngine::WorldTransform worldTransform_;
 
-	// カメラ
 	KamataEngine::Camera camera_;
 
 	// モデル
