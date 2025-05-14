@@ -7,6 +7,7 @@ GameScene::~GameScene() {
 	delete model_;
 	delete player_;
 	delete debugCamera_;
+	delete modelSkydome_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlocklone : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlocklone) {
@@ -25,6 +26,10 @@ void GameScene::Initialize() {
 
 	modelBlock_ = Model::CreateFromOBJ("cube");
 
+	//3Dモデルの生成
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+
+
 	// ワールドトランスフォームの初期化
 	// worldTransform_.Initialize();
 
@@ -32,8 +37,11 @@ void GameScene::Initialize() {
 	camera_.Initialize();
 
 	player_ = new Player();
+	skydome_ = new Skydome();
+	
 
 	player_->Initialize(model_, textureHandle_, &camera_);
+	skydome_->Intialize(modelSkydome_, textureHandle_, &camera_);
 
 	// デバックカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
@@ -67,6 +75,8 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 	player_->Update();
+
+	skydome_->Update();
 
 	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -110,6 +120,8 @@ void GameScene::Update() {
 
 void GameScene::Draw() {
 
+	
+
 	// DirectXCommonインスタンスの取得
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
@@ -117,6 +129,7 @@ void GameScene::Draw() {
 	Model::PreDraw(dxCommon->GetCommandList());
 
 	player_->Draw();
+	skydome_->Draw();
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 

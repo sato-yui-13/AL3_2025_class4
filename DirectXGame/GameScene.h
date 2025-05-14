@@ -3,7 +3,7 @@
 #include"Player.h"
 #include<vector>
 #include "MyMath.h"
-
+#include "Skydome.h"
 
 // ゲームシーン
 class GameScene {
@@ -23,7 +23,12 @@ private:
 	// 3Dモデル
 	KamataEngine::Model* model_ = nullptr;
 
+	KamataEngine::Model* modelSkydome_ = nullptr;
+
 	KamataEngine::Model* modelBlock_ = nullptr;
+
+	Skydome* skydome_ = nullptr;
+
 
 	// ワールドトランクスフォーム
 	//KamataEngine::WorldTransform worldTransform_;
