@@ -4,6 +4,7 @@
 #include<vector>
 #include "MyMath.h"
 #include "Skydome.h"
+#include "MapChipField.h"
 
 // ゲームシーン
 class GameScene {
@@ -18,6 +19,8 @@ public:
 
 	//描画
 	void Draw();
+
+	void GenerateBlocks();
 
 private:
 	// 3Dモデル
@@ -50,5 +53,7 @@ private:
 	//デバックカメラ
 	KamataEngine::DebugCamera* debugCamera_ = nullptr;
 
+	//マップチップフィールド
+	MapChipField* mapChipField_;
 
 };
