@@ -4,6 +4,7 @@
 #include<vector>
 #include "MyMath.h"
 #include "Skydome.h"
+#include "CameraController.h"
 #include "MapChipField.h"
 
 // ゲームシーン
@@ -32,7 +33,7 @@ private:
 
 	Skydome* skydome_ = nullptr;
 
-
+	CameraController* cameraController_ = nullptr;
 	// ワールドトランクスフォーム
 	//KamataEngine::WorldTransform worldTransform_;
 
@@ -55,5 +56,8 @@ private:
 
 	//マップチップフィールド
 	MapChipField* mapChipField_;
+
+	
+
 
 };

@@ -1,9 +1,7 @@
 #pragma once
 #include "GameScene.h"
 #include "MyMath.h"
-
 #include <KamataEngine.h>
-
 
 // 左右
 enum class LRDirection {
@@ -23,6 +21,9 @@ public:
 
 	// 描画
 	void Draw();
+
+	const KamataEngine::WorldTransform& GetWorldTransform() const { return worldTransform_; }
+	const KamataEngine::Vector3& GetVelocity() const { return velocity_; }
 
 private:
 	// ワールド変換データ
@@ -44,16 +45,14 @@ private:
 
 	LRDirection lrDirection_ = LRDirection::kRight;
 
-	//施回開始時の角度
+	// 施回開始時の角度
 	float turnFirstRotationY_ = 0.0f;
 
-	//施回タイマー	
-	float turnTimer_=0.0f;
+	// 施回タイマー
+	float turnTimer_ = 0.0f;
 
-	//施回時間<秒>
+	// 施回時間<秒>
 	static inline const float kTimeTurn = 0.1f;
-
-
 
 	static inline const float kGravityAcceleration = 1;
 	static inline const float kLimitFallSpeed = 1;
@@ -61,6 +60,5 @@ private:
 
 	bool onGrand_ = true;
 
-
+	
 };
-
