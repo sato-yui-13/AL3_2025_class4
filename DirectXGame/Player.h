@@ -3,12 +3,7 @@
 #include "MyMath.h"
 #include <KamataEngine.h>
 
-// 左右
-enum class LRDirection {
-	kRight,
-	kLeft,
-
-};
+class MapChipField;
 
 // ゲームシーン
 class Player {
@@ -22,10 +17,60 @@ public:
 	// 描画
 	void Draw();
 
+
+	//移動
+	void InputMove();
+
+	// 左右
+	enum class LRDirection {
+		kRight,
+		kLeft,
+
+	};
+
+
+	//角
+	enum Corner {
+		kRightBottom,//右下
+		kLeftBottom,//左下
+		kRightTop,//右上
+		kLeftTop,//左上
+
+		kNumCorner//要素数
+
+	};
+
+	KamataEngine::Vector3 CornerPosition(const KamataEngine::Vector3&center,Corner corner);
+
+	// マップチップと当たり判定情報
+	struct CollisionMapInfo {
+		bool ceiling = false;
+		bool landing = false;
+		bool hitWall = false;
+		KamataEngine::Vector3 move;
+	};
+
+	void SetMapChipField(MapChipField* mapChipField) { mapChipField; }
+
+	void CheckMapCollision(CollisionMapInfo& info);
+
+	void CheckMapCollisionUp(CollisionMapInfo& info);
+
 	const KamataEngine::WorldTransform& GetWorldTransform() const { return worldTransform_; }
 	const KamataEngine::Vector3& GetVelocity() const { return velocity_; }
 
+
+	//
+	void CheckMapMove(const CollisionMapInfo& info);
+
+	//
+	//
+	void CheckMapCeiling(const CollisionMapInfo& info);
+
 private:
+	// マップチップによるフィールド
+	MapChipField* mapChipField_ = nullptr;
+
 	// ワールド変換データ
 	KamataEngine::WorldTransform worldTransform_;
 
@@ -60,5 +105,11 @@ private:
 
 	bool onGrand_ = true;
 
+	// キャラの当たり判定サイズ
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
+	static inline const float kBlank = 0.8f;
+
 	
+
 };
