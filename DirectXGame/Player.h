@@ -56,11 +56,17 @@ public:
 
 	void CheckMapCollisionUp(CollisionMapInfo& info);
 
+	void CheckMapCollisionDown(CollisionMapInfo& info);
+	
+	
+	//着地
+	void CheckMaplanding(const CollisionMapInfo& info);
+	
 	const KamataEngine::WorldTransform& GetWorldTransform() const { return worldTransform_; }
 	const KamataEngine::Vector3& GetVelocity() const { return velocity_; }
 
 
-	//
+	
 	void CheckMapMove(const CollisionMapInfo& info);
 
 	//
@@ -103,7 +109,7 @@ private:
 	static inline const float kLimitFallSpeed = 1;
 	static inline const float kJumpAcceleration = 1;
 
-	bool onGrand_ = true;
+	bool onGround_ = true;
 
 	// キャラの当たり判定サイズ
 	static inline const float kWidth = 0.8f;

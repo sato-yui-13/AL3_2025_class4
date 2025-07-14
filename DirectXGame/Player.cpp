@@ -1,7 +1,7 @@
 #define NOMINMAX
 #include "GameScene.h"
-#include "MyMath.h"
 #include "MapChipField.h"
+#include "MyMath.h"
 #include "cassert"
 #include <algorithm>
 #include <numbers>
@@ -9,8 +9,7 @@
 using namespace KamataEngine;
 using namespace MathUtility;
 
-void Player::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine::Vector3& position) 
-{
+void Player::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine::Vector3& position) {
 
 	// NULLポインタチェック
 	assert(model);
@@ -33,7 +32,7 @@ void Player::InputMove() {
 	// 移動入力
 
 	// 左右移動動作
-	if (onGrand_) {
+	if (onGround_) {
 
 		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
 			// 左右加速
@@ -101,7 +100,7 @@ void Player::CheckMapCollision(CollisionMapInfo& info) { CheckMapCollisionUp(inf
 void Player::CheckMapCollisionUp(CollisionMapInfo& info) {
 	// 移動後の４つの角の座標
 	std::array<Vector3, kNumCorner> positionsNew;
-	for (uint32_t i = 0; i < positionsNew.size();) {
+	for (uint32_t i = 0; i < positionsNew.size(); i++) {
 		positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
 	}
 
@@ -136,6 +135,57 @@ void Player::CheckMapCollisionUp(CollisionMapInfo& info) {
 		MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
 		info.move.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - (kHeight / 2.0f + kBlank));
 		info.ceiling = true;
+	}
+}
+
+void Player::CheckMapCollisionDown(CollisionMapInfo& info) {
+	MapChipType mapChipType;
+	bool hit = false;
+	MapChipField::IndexSet indexSet;
+
+	std::array<Vector3, kNumCorner> positionsNew;
+
+	// 左下点の判定
+	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftBottom]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+
+	// 右下点の判定
+	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightBottom]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	if (info.move.y >= 0) {
+		return;
+	}
+
+	if (hit) {
+
+		info.landing = true;
+		// めり込みを排除する方向に移動量を設定する
+		// indexSet = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_+info.move+Vector3(0,-kHeight/2.0f,0));
+		MapChipField::IndexSet indexSetNow;
+		indexSetNow = mapChipField_->GetMapChipIndexSetByPosition(worldTransform_.translation_ + info.move + Vector3(0, -kHeight / 2.0f, 0));
+		// めり込み先ブロックの範囲
+		MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
+		if (indexSetNow.yIndex != indexSetNow.yIndex) {
+
+			info.move.y = std::min(0.0f, rect.top - worldTransform_.translation_.y + (kHeight / 2.0f + kBlank));
+
+			// 地面に当たったことを記録する
+			info.landing = true;
+		}
+	}
+
+}
+
+// 接地状態の切り替え処理
+void Player::CheckMaplanding(const CollisionMapInfo& info) {
+	// 自キャラが接地状態
+	if (onGround_) {
+		// 接地状態の処理
+		// ジャンプ開始
+		if (velocity_.y > 0.0f) {
+
+			onGround_ = false;
+		}
 	}
 }
 
@@ -174,11 +224,11 @@ void Player::Update() {
 		}
 	}
 
-	if (onGrand_) {
+	if (onGround_) {
 
 		if (velocity_.y > 0.0f) {
 			// 空中
-			onGrand_ = false;
+			onGround_ = false;
 		}
 
 	} else {
@@ -191,7 +241,7 @@ void Player::Update() {
 			// 下方向速度をリセット
 			velocity_.y = 0.0f;
 			// 着地状態に行こう
-			onGrand_ = true;
+			onGround_ = true;
 		}
 	}
 
@@ -234,5 +284,3 @@ void Player::Draw() {
 	// 3Dモデル描画後処理
 	// Model::PostDraw();
 }
-
-
