@@ -57,7 +57,11 @@ public:
 	void CheckMapCollisionUp(CollisionMapInfo& info);
 
 	void CheckMapCollisionDown(CollisionMapInfo& info);
-	
+
+	void CheckMapCollisionRight(CollisionMapInfo& info);
+	void CheckMapCollisionLeft(CollisionMapInfo& info);
+
+	void AnimateTurn();
 	
 	//着地
 	void CheckMaplanding(const CollisionMapInfo& info);
@@ -72,6 +76,9 @@ public:
 	//
 	//
 	void CheckMapCeiling(const CollisionMapInfo& info);
+	void CheckMapWall(const CollisionMapInfo& info);
+
+	void CheckMapLanding(const CollisionMapInfo& info);
 
 private:
 	// マップチップによるフィールド
@@ -93,6 +100,9 @@ private:
 	static inline const float kAcceleration = 0.1f;
 	static inline const float kLimitRunSpeed = 2;
 	static inline const float kAttenuation = 0.1f;
+	static inline const float kAttenuationLanding = 0.0f;
+	static inline const float kGroundSearchHeight = 0.0f;
+
 
 	LRDirection lrDirection_ = LRDirection::kRight;
 
